@@ -36,15 +36,13 @@ export default function App() {
     }
   });
 
-  const [adminPass, setAdminPass] = useState<string>(() => {
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
     try {
-      return localStorage.getItem('kx_admin_pass') || 'admin123';
+      return sessionStorage.getItem('kx_admin_logged') === 'true';
     } catch {
-      return 'admin123';
+      return false;
     }
   });
-
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -68,7 +66,34 @@ export default function App() {
     }, 3200);
   };
 
-  // Synchronize localStorage
+  // Synchronize with server on load
+  useEffect(() => {
+    fetch('/api/listings')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setListings(data);
+          try {
+            localStorage.setItem('kx_listings', JSON.stringify(data));
+          } catch {}
+        }
+      })
+      .catch((err) => console.warn('Could not sync listings from server:', err));
+
+    fetch('/api/leads')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setLeads(data);
+          try {
+            localStorage.setItem('kx_leads', JSON.stringify(data));
+          } catch {}
+        }
+      })
+      .catch((err) => console.warn('Could not sync leads from server:', err));
+  }, []);
+
+  // Synchronize localStorage as backup
   useEffect(() => {
     try {
       localStorage.setItem('kx_listings', JSON.stringify(listings));
@@ -84,14 +109,6 @@ export default function App() {
       console.error('Failed to save leads to localStorage', e);
     }
   }, [leads]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('kx_admin_pass', adminPass);
-    } catch (e) {
-      console.error('Failed to save admin password to localStorage', e);
-    }
-  }, [adminPass]);
 
   // Keyboard Shortcuts (Esc to close, Ctrl+Shift+A for Admin)
   useEffect(() => {
@@ -116,45 +133,84 @@ export default function App() {
   }, [isAdminLoggedIn]);
 
   // Save Lead Function
-  const handleSaveLead = (phone: string, name?: string) => {
-    const now = new Date();
-    const timeString = now.toLocaleDateString('vi-VN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-
-    const newLead: CustomerLead = {
+  const handleSaveLead = async (phone: string, name?: string) => {
+    const fallbackLead: CustomerLead = {
       id: Date.now(),
-      time: timeString,
+      time: new Date().toLocaleDateString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }),
       name: name || 'Khách hàng gửi yêu cầu',
       phone,
     };
 
-    setLeads((prev) => [newLead, ...prev]);
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, name }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.lead) {
+        setLeads((prev) => [data.lead, ...prev]);
+      } else {
+        setLeads((prev) => [fallbackLead, ...prev]);
+      }
+    } catch {
+      setLeads((prev) => [fallbackLead, ...prev]);
+    }
+
     showToast('Gửi thông tin thành công! Đang chuyển tiếp sang Zalo Anh Khánh...');
     window.open('https://zalo.me/0946373066', '_blank');
   };
 
   // Create Listing
-  const handleCreateListing = (newListingData: Omit<Listing, 'id'>) => {
-    const newListing: Listing = {
+  const handleCreateListing = async (newListingData: Omit<Listing, 'id'>) => {
+    const localItem: Listing = {
       ...newListingData,
       id: Date.now(),
     };
-    setListings((prev) => [newListing, ...prev]);
+
+    try {
+      const res = await fetch('/api/listings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newListingData),
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.listing) {
+        setListings((prev) => [data.listing, ...prev]);
+      } else {
+        setListings((prev) => [localItem, ...prev]);
+      }
+    } catch {
+      setListings((prev) => [localItem, ...prev]);
+    }
+
     showToast('Đăng bài thành công với bộ ảnh kho xưởng mới!');
   };
 
   // Update Listing
-  const handleUpdateListing = (id: number, updatedListingData: Omit<Listing, 'id'>) => {
+  const handleUpdateListing = async (id: number, updatedListingData: Omit<Listing, 'id'>) => {
     const updatedItem: Listing = {
       ...updatedListingData,
       id,
     };
+
+    try {
+      await fetch(`/api/listings/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedListingData),
+      });
+    } catch (err) {
+      console.warn('Error updating listing on server:', err);
+    }
+
     setListings((prev) => prev.map((item) => (item.id === id ? updatedItem : item)));
     if (activeDetailListing?.id === id) {
       setActiveDetailListing(updatedItem);
@@ -163,7 +219,15 @@ export default function App() {
   };
 
   // Delete Listing
-  const handleDeleteListing = (id: number) => {
+  const handleDeleteListing = async (id: number) => {
+    try {
+      await fetch(`/api/listings/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.warn('Error deleting listing on server:', err);
+    }
+
     setListings((prev) => {
       const updated = prev.filter((i) => i.id !== id);
       try {
@@ -173,6 +237,7 @@ export default function App() {
       }
       return updated;
     });
+
     if (activeDetailListing?.id === id) {
       setActiveDetailListing(null);
     }
@@ -180,7 +245,15 @@ export default function App() {
   };
 
   // Delete Lead
-  const handleDeleteLead = (id: number) => {
+  const handleDeleteLead = async (id: number) => {
+    try {
+      await fetch(`/api/leads/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.warn('Error deleting lead on server:', err);
+    }
+
     setLeads((prev) => {
       const updated = prev.filter((l) => l.id !== id);
       try {
@@ -191,6 +264,26 @@ export default function App() {
       return updated;
     });
     showToast('Đã xóa thông tin khách hàng thành công!');
+  };
+
+  // Save new password and sync across all clients via server
+  const handleSaveNewPass = async (newPass: string, currentPass?: string) => {
+    try {
+      const res = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: currentPass, newPassword: newPass }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showToast('Mật khẩu mới đã được cập nhật và đồng bộ trên tất cả thiết bị!');
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, message: data.message || 'Mật khẩu hiện tại không chính xác!' };
+      }
+    } catch {
+      return { success: false, message: 'Lỗi kết nối máy chủ khi đổi mật khẩu!' };
+    }
   };
 
   // Social Sharing
@@ -368,9 +461,11 @@ export default function App() {
       <AdminLoginModal
         isOpen={isAdminLoginModalOpen}
         onClose={() => setIsAdminLoginModalOpen(false)}
-        adminPass={adminPass}
         onSuccess={() => {
           setIsAdminLoggedIn(true);
+          try {
+            sessionStorage.setItem('kx_admin_logged', 'true');
+          } catch {}
           setIsAdminLoginModalOpen(false);
           setIsAdminDashboardOpen(true);
           showToast('Đăng nhập quản trị thành công!');
@@ -380,10 +475,7 @@ export default function App() {
       <ChangePassModal
         isOpen={isChangePassModalOpen}
         onClose={() => setIsChangePassModalOpen(false)}
-        onSaveNewPass={(newP) => {
-          setAdminPass(newP);
-          showToast('Đã lưu mật khẩu mới thành công! Hãy ghi nhớ mật khẩu này.');
-        }}
+        onSaveNewPass={handleSaveNewPass}
       />
 
       <AdminDashboard
@@ -391,6 +483,9 @@ export default function App() {
         onClose={() => setIsAdminDashboardOpen(false)}
         onLogout={() => {
           setIsAdminLoggedIn(false);
+          try {
+            sessionStorage.removeItem('kx_admin_logged');
+          } catch {}
           setIsAdminDashboardOpen(false);
           showToast('Đã đăng xuất khỏi tài khoản Admin.');
         }}

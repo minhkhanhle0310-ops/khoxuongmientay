@@ -1,0 +1,130 @@
+{
+  "adminPass": "admin123",
+  "listings": [
+    {
+      "id": 1,
+      "title": "Cho thuê kho xưởng 2.500m² tiêu chuẩn KCN Tân Hương, Tiền Giang",
+      "province": "Tiền Giang",
+      "type": "Cho Thuê",
+      "area": "2.500 m²",
+      "areaValue": 2500,
+      "price": "75.000.000 VNĐ / tháng (30.000 VNĐ/m²)",
+      "priceValue": 75000000,
+      "priceMode": "sqm",
+      "image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Nhà xưởng khung thép Zamil cao 10.5m thông thoáng, trạm điện 500KVA riêng biệt, hệ thống PCCC tự động Sprinkler đã nghiệm thu, sân bãi bê tông kiên cố, đường xe container 40 feet ra vào thuận tiện 24/7.",
+      "power": "500 KVA",
+      "pccc": "PCCC Sprinkler Tự Động",
+      "road": "Xe Container 40ft (Đường 12m)",
+      "createdAt": "2026-03-25"
+    },
+    {
+      "id": 2,
+      "title": "Cho thuê kho trung chuyển logistics 1.200m² QL91, Cần Thơ",
+      "province": "Cần Thơ",
+      "type": "Cho Thuê",
+      "area": "1.200 m²",
+      "areaValue": 1200,
+      "price": "38.000.000 VNĐ / tháng (31.666 VNĐ/m²)",
+      "priceValue": 38000000,
+      "priceMode": "month",
+      "image": "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Kho xưởng gạt phẳng bê tông cốt thép chịu tải 5 tấn/m², sàn nâng hạ hàng Dock Leveler, vị trí kết nối ngay trục Quốc lộ 91 và nút giao cao tốc Cần Thơ, thuận tiện làm kho trung chuyển phân phối hàng hóa đi các tỉnh Tây Nam Bộ.",
+      "power": "250 KVA",
+      "pccc": "Vách Tường nghiệm thu",
+      "road": "Đường Nhựa Container",
+      "createdAt": "2026-03-26"
+    },
+    {
+      "id": 3,
+      "title": "Bán gấp 6.000m² Đất SKC đã xây sẵn Xưởng 3.800m² Đức Hòa, Long An",
+      "province": "Long An",
+      "type": "Bán",
+      "area": "6.000 m²",
+      "areaValue": 6000,
+      "price": "32.000.000.000 VNĐ (32 Tỷ đồng)",
+      "priceValue": 32000000000,
+      "image": "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Sổ hồng chủ quyền hoàn công xưởng 100%, đất sản xuất kinh doanh SKC thời hạn lâu dài, có bình điện 1000KVA, nhà điều hành văn phòng 2 tầng, tường rào biệt lập, bàn giao kinh doanh và sản xuất ngay lập tức.",
+      "power": "1000 KVA",
+      "pccc": "Nghiệm Thu Đầy Đủ",
+      "road": "Đường Nhựa 12m Container",
+      "createdAt": "2026-03-28"
+    },
+    {
+      "id": 4,
+      "title": "Cho thuê cụm kho bãi 3.500m² mặt tiền QL1A, TP. Mỹ Tho, Tiền Giang",
+      "province": "Tiền Giang",
+      "type": "Cho Thuê",
+      "area": "3.500 m²",
+      "areaValue": 3500,
+      "price": "105.000.000 VNĐ / tháng (105 Triệu đồng)",
+      "priceValue": 105000000,
+      "priceMode": "month",
+      "image": "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Mặt tiền Quốc lộ 1A rộng thênh thang, phù hợp làm showroom trưng bày kết hợp tổng kho trung chuyển máy móc nông nghiệp, vật liệu xây dựng, phân bón. Có bãi đỗ hơn 10 xe container.",
+      "power": "400 KVA",
+      "pccc": "PCCC Vách Tường",
+      "road": "Mặt Tiền QL1A",
+      "createdAt": "2026-03-29"
+    },
+    {
+      "id": 5,
+      "title": "Cần cho thuê kho lạnh & kho mát nông sản 1.000m² Sa Đéc, Đồng Tháp",
+      "province": "Đồng Tháp",
+      "type": "Cho Thuê",
+      "area": "1.000 m²",
+      "areaValue": 1000,
+      "price": "45.000.000 VNĐ / tháng (45 Triệu đồng)",
+      "priceValue": 45000000,
+      "priceMode": "month",
+      "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Kho lạnh tiêu chuẩn bảo quản trái cây, hoa kiểng, thủy hải sản. Nhiệt độ điều chỉnh từ -18°C đến +15°C. Đầy đủ hệ thống máy phát điện dự phòng tự động 100%.",
+      "power": "320 KVA + Máy Phát Dự Phòng",
+      "pccc": "Nghiệm thu chuẩn công nghiệp",
+      "road": "Đường xe tải 15 tấn / container 20ft",
+      "createdAt": "2026-03-29"
+    },
+    {
+      "id": 6,
+      "title": "Bán nhà xưởng chế biến xuất khẩu 4.500m² KCN Trà Nóc, Cần Thơ",
+      "province": "Cần Thơ",
+      "type": "Bán",
+      "area": "4.500 m²",
+      "areaValue": 4500,
+      "price": "24.500.000.000 VNĐ (24,5 Tỷ đồng)",
+      "priceValue": 24500000000,
+      "image": "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Hạ tầng KCN hoàn chỉnh bậc nhất Cần Thơ, trạm xử lý nước thải tập trung, trạm biến áp 750KVA, giấy phép ngành nghề đa dạng, pháp lý rõ ràng chuyển nhượng nhanh gọn.",
+      "power": "750 KVA",
+      "pccc": "PCCC Thẩm Duyệt Nghiệm Thu",
+      "road": "Trục chính KCN 25m",
+      "createdAt": "2026-03-30"
+    }
+  ],
+  "leads": []
+}

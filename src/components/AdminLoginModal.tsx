@@ -1,33 +1,53 @@
 import React, { useState } from 'react';
-import { X, Lock, Eye, EyeOff } from 'lucide-react';
+import { X, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  adminPass: string;
 }
 
 export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
-  adminPass,
 }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === adminPass) {
-      setErrorMsg('');
-      setPassword('');
-      onSuccess();
-    } else {
-      setErrorMsg('Mật khẩu quản trị không chính xác! (Mặc định: admin123)');
+    if (!password.trim()) {
+      setErrorMsg('Vui lòng nhập mật khẩu quản trị!');
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: password.trim() }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setErrorMsg('');
+        setPassword('');
+        onSuccess();
+      } else {
+        setErrorMsg(data.message || 'Mật khẩu quản trị không chính xác!');
+      }
+    } catch {
+      setErrorMsg('Không thể kết nối đến máy chủ. Vui lòng thử lại!');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,9 +110,17 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
 
           <button
             type="submit"
-            className="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-md transition cursor-pointer"
+            disabled={isLoading}
+            className="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-md transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Đăng Nhập Quản Trị
+            {isLoading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Đang xác thực...</span>
+              </>
+            ) : (
+              <span>Đăng Nhập Quản Trị</span>
+            )}
           </button>
         </form>
       </div>
