@@ -1,0 +1,6 @@
+{
+  "name": "Kho Xưởng Miền Tây",
+  "description": "Cổng thông tin mua bán và cho thuê kho xưởng, nhà xưởng sản xuất, đất công nghiệp tại 13 tỉnh thành Đồng bằng Sông Cửu Long (ĐBSCL).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
