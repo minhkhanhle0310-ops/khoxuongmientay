@@ -25,7 +25,7 @@ function loadStore(): StoreData {
       const raw = fs.readFileSync(STORE_FILE, 'utf-8');
       const parsed = JSON.parse(raw);
       return {
-        adminPass: parsed.adminPass || 'admin123',
+        adminPass: parsed.adminPass || 'khanhkhoxuongmientay123@!',
         listings: Array.isArray(parsed.listings) ? parsed.listings : [],
         leads: Array.isArray(parsed.leads) ? parsed.leads : [],
       };
@@ -35,7 +35,7 @@ function loadStore(): StoreData {
   }
 
   return {
-    adminPass: 'admin123',
+    adminPass: 'khanhkhoxuongmientay123@!',
     listings: [],
     leads: [],
   };
@@ -72,7 +72,7 @@ async function startServer() {
   // Check admin setup status (does not expose password)
   app.get('/api/admin/check-status', (_req, res) => {
     res.json({
-      hasCustomPass: store.adminPass !== 'admin123',
+      hasCustomPass: store.adminPass !== 'khanhkhoxuongmientay123@!',
     });
   });
 
